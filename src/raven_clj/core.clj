@@ -14,7 +14,7 @@
           uri project-id))
 
 (defn make-sentry-header [ts key secret]
-  (format "Sentry sentry_version=2.0, sentry_client=raven-clj/1.2.1, sentry_timestamp=%s, sentry_key=%s, sentry_secret=%s"
+  (format "Sentry sentry_version=2.0, sentry_client=raven-clj/1.3.1, sentry_timestamp=%s, sentry_key=%s, sentry_secret=%s"
           ts key secret))
 
 (defn parse-dsn [dsn]
@@ -29,7 +29,8 @@
      :project-id (Integer/parseInt (last (string/split url #"/")))}))
 
 (defn send-packet [dsn packet-info]
-  (let [{:keys [ts uri project-id key secret]} (parse-dsn dsn)
+  (let [{:keys [uri project-id key secret]} (parse-dsn dsn)
+        ts (str (Timestamp. (.getTime (Date.))))
         url (make-sentry-url uri project-id)
         header (make-sentry-header ts key secret)]
     (http/post url
