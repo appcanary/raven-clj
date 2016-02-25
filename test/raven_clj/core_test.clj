@@ -23,7 +23,7 @@
       (is (= (make-sentry-header ts
                                  "b70a31b3510c4cf793964a185cfe1fd0"
                                  "b7d80b520139450f903720eb7991bf3d")
-             (format "Sentry sentry_version=2.0, sentry_client=raven-clj/0.6.0, sentry_timestamp=%s, sentry_key=b70a31b3510c4cf793964a185cfe1fd0, sentry_secret=b7d80b520139450f903720eb7991bf3d" ts))))))
+             (format "Sentry sentry_version=2.0, sentry_client=raven-clj/1.3.1, sentry_timestamp=%s, sentry_key=b70a31b3510c4cf793964a185cfe1fd0, sentry_secret=b7d80b520139450f903720eb7991bf3d" ts))))))
 
 (deftest test-parse-dsn
   (testing "dsn parsing"
@@ -58,7 +58,7 @@
   (testing "capture"
     (testing "with a valid dsn"
       (let [event-info (atom nil)]
-        (with-redefs [send-packet (fn [ev] (reset! event-info ev))]
+        (with-redefs [send-packet (fn [dsn ev] (reset! event-info ev))]
           (capture example-dsn {})
           (is (= (:platform @event-info) "clojure")
               "should set :platform in event-info to clojure"))))))
