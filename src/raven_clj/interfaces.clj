@@ -27,7 +27,12 @@
   {:frames (reverse (map #(make-frame % app-namespaces) elements))})
 
 (defn stacktrace [event-map ^Exception e & [app-namespaces]]
-  (assoc event-map
-    :exception [{:stacktrace (make-stacktrace-info (.getStackTrace e) app-namespaces)
-                 :type (str (class e))
-                 :value (.getMessage e)}]))
+  (let [message (.getMessage e)
+        value (if (instance? clojure.lang.IExceptionInfo e)
+                (assoc (ex-data e)
+                       :message message)
+                message)]
+    (assoc event-map
+           :exception [{:stacktrace (make-stacktrace-info (.getStackTrace e) app-namespaces)
+                        :type (str (class e))
+                        :value value}])))
