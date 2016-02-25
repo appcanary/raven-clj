@@ -7,7 +7,7 @@
              (if (not= 80 (:server-port req))
                (str ":" (:server-port req)))
              (:uri req))
-   :method (:method req)
+   :method (:request-method req)
    :headers (get req :headers {})
    :query_string (get req :query-string "")
    :data (get req :params {})
